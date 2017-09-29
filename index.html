@@ -1,17 +1,96 @@
 
+<meta charset="utf-8">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css.map" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+<style>
+    #div {
+        background-color: black;
+    }
+    .quote {
+        font: Monospace;
+        font-size: 30px;
+        font-style: italic;
+        text-align: center;
+    }
+    .author {
+        font-size: 25px;
+        font-style: bold;
+        text-align: center;
+        font: Monospace;
+    }
+    .titre {
+        color: black;
+        font-size: 90px;
+        font-style: bold;
+        text-align: center;
+        font: Monospace;
+        font-style: italic;
+        font-weight: bold;
+    }
+    .produit {
+        color: black;
+        font-style: oblique;
+        font: Monospace;
+        font-size: 20px;
+        text-align: center;
+    }
+    .thick-green-border {
+        border-color: green;
+        border-width: 10px;
+        border-style: solid;
+        text-align: center;
+        border-radius: 20%;
+    }
+    .page {
+        text-align: center;
+    }
+</style>
+
+<head>
+    <title> Local weather </title>
+</head>
 
 <script>
-  // Only change code below this line.
-  if (navigator.geolocation) {
-navigator.geolocation.getCurrentPosition(function(position) {
-$("#data").html("latitude: " + position.coords.latitude + "<br>longitude: " + position.coords.longitude);
-});
-}
-
-
-  // Only change code above this line.
+    var degree = true;
+    if (navigator.geolocation) {
+        var latitude = 0;
+        var longitude = 0;
+        navigator.geolocation.getCurrentPosition(function(position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            $.get("https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/219e96ac334db06fcd9d333d1afc400b/" + longitude + "," + latitude, function(forecast) {
+            $(".position").html(forecast.timezone);
+            $(".weather").html(forecast.currently.summary);
+            $(".temperature").html(forecast.currently.temperature + "°F");
+            });
+        });
+    }
+    $(document).ready(function() {
+        $("#newquote").on("click", function(){
+        });
+    });
 </script>
-<div id = "data">
-  <h4>You are here:</h4>
 
+<div class="page">
+    <div class="titre">
+        Local weather
+    </div>
+    <br>
+    <button class="btn btn-default" disabled>
+        <div class="position produit">
+            France, Paris
+        </div>
+    </button>
+    <button class="btn btn-default" disabled>
+        <div class="weather produit">
+            Sunny
+        </div>
+    </button>
+    <button class="btn btn-default">
+        <div class="temperature produit">
+            85°F
+        </div>
+    </button>
+    <br>
 </div>
