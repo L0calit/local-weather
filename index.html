@@ -45,6 +45,11 @@
     .page {
         text-align: center;
     }
+    .image {
+    text-align: center;
+    width: 250px;
+    height: 150px;
+    }
 </style>
 
 <head>
@@ -52,22 +57,38 @@
 </head>
 
 <script>
-    var degree = true;
+    var degree = 0;
+    var celsius = true;
     if (navigator.geolocation) {
         var latitude = 0;
         var longitude = 0;
         navigator.geolocation.getCurrentPosition(function(position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            $.get("https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/219e96ac334db06fcd9d333d1afc400b/" + longitude + "," + latitude, function(forecast) {
-            $(".position").html(forecast.timezone);
-            $(".weather").html(forecast.currently.summary);
-            $(".temperature").html(forecast.currently.temperature + "°F");
+            $.get("https://fcc-weather-api.glitch.me/api/current?lon=" + longitude + "&lat=" + latitude, function(forecast) {
+            $(".position").html(forecast.name + ", " + forecast.sys.country);
+            $(".weather").html(forecast.weather[0].main);
+            $(".temperature").html(forecast.main.temp + "°C");
+            degree = forecast.main.temp;
+            if (forecast.weather[0].icon != null) {
+                $(".image-weather").html('<img class="image" src="' + forecast.weather[0].icon + '" alt="No image">');
+            } else {
+                $(".image-weather").html('<img class="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Heavy_rain.svg/256px-Heavy_rain.svg.png" alt="No image in API">');
+            }
             });
         });
     }
     $(document).ready(function() {
-        $("#newquote").on("click", function(){
+        $(".temperature").on("click", function(){
+            if (celsius == true) {
+                degree = degree * 1.8 + 32;
+                $(".temperature").html(degree + "°F");
+                celsius = false;
+            } else {
+                degree = (degree - 32) * 5 / 9;
+                $(".temperature").html(degree + "°C");
+                celsius = true;
+            }
         });
     });
 </script>
@@ -79,7 +100,7 @@
     <br>
     <button class="btn btn-default" disabled>
         <div class="position produit">
-            France, Paris
+            Paris, FR
         </div>
     </button>
     <button class="btn btn-default" disabled>
@@ -92,5 +113,7 @@
             85°F
         </div>
     </button>
-    <br>
+    <br><br>
+    <div class="image-weather">
+    </div>
 </div>
