@@ -76,11 +76,15 @@
                     } else {
                         $(".image-weather").html('<img class="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Heavy_rain.svg/256px-Heavy_rain.svg.png" alt="No image in API">');
                     }
-                });
+                }, erreur);
             });
         }
     });
-
+    
+    function erreur() {
+        alert("User doesn't allow to be tracked");    
+    }
+    
     function change() {
         if (celsius == true) {
             degree = Math.round(degree * 1.8 + 32);
